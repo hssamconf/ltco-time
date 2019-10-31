@@ -1,1 +1,32 @@
-<h1>Hello world !</h1>
+<div class="container">
+
+  <div class="fixed-top mt-4">
+    <h2>Bonjour</h2>
+    <h5 class="mt-3">On est le
+      <mdb-badge [success]="true">{{today.format('dddd') | uppercase}}</mdb-badge>
+    </h5>
+    <h5>Heures de travail prévues
+      <mdb-badge [success]="true">{{defaultHours}}:{{defaultMinutes}}</mdb-badge>
+    </h5>
+  </div>
+
+  <div class="md-form form-group">
+    <input [format]="24" [ngxTimepicker]="picker" class="form-control" id="form1" mdbInput readonly type="text">
+    <label for="form1">Entrée</label>
+    <ngx-material-timepicker #picker (timeSet)="onSelectHour($event)" defaultTime="09:00"></ngx-material-timepicker>
+  </div>
+
+  <!-- Material form group -->
+  <div class="fixed-bottom mb-4">
+    <h2>
+      <mdb-badge [success]="true">
+        <mdb-icon fas icon="running"></mdb-icon>
+        {{exit?.format('HH:mm')}}
+      </mdb-badge>
+    </h2>
+    <p>{{exit?.fromNow()}}</p>
+  </div>
+
+</div>
+
+
