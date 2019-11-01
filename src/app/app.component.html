@@ -11,14 +11,59 @@
   </div>
 
   <div class="md-form form-group">
-    <input [format]="24" [ngxTimepicker]="picker" class="form-control" id="form1" mdbInput readonly type="text">
+    <input [format]="24" [ngxTimepicker]="timepicker" class="form-control" id="form1" mdbInput readonly type="text">
     <label for="form1">Entrée</label>
-    <ngx-material-timepicker #picker (timeSet)="onSelectHour($event)" defaultTime="09:00"></ngx-material-timepicker>
+    <ngx-material-timepicker #timepicker (timeSet)="onSelectHour($event)" defaultTime="09:00"></ngx-material-timepicker>
   </div>
+  <!-- Material column sizing form -->
+  <div #times_container class="times-container">
+    <!-- Grid row -->
+    <div *ngFor="let times of timesList; let i = index" class="form-row align-items-center animated slideInLeft">
+      <!-- Grid column -->
+      <div class="col">
+        <!-- Material input -->
+        <div class="md-form">
+          <input [format]="24" [id]="'sortie_'+i" [ngxTimepicker]="sortie_timepicker" class="form-control" mdbInput
+                 readonly
+                 type="text">
+          <label [for]="'sortie_'+i">Sortie</label>
+          <ngx-material-timepicker #sortie_timepicker (timeSet)="onSelectAdditionalTime($event, i,'exit')"
+                                   defaultTime="12:00"></ngx-material-timepicker>
+        </div>
+      </div>
+      <!-- Grid column -->
 
-  <button color="light" mdbBtn mdbWavesEffect rounded="true" size="sm" type="button">
-    <mdb-icon class="mr-1" fas icon="plus"></mdb-icon>
-    Ajouter Sortie/Entrée
+      <!-- Grid column -->
+      <div class="col">
+        <!-- Material input -->
+        <div class="md-form">
+          <input [format]="24" [id]="'entree_'+i" [ngxTimepicker]="entree_timepicker" class="form-control" mdbInput
+                 readonly type="text">
+          <label [for]="'entree_'+i">Entrée</label>
+          <ngx-material-timepicker #entree_timepicker (timeSet)="onSelectAdditionalTime($event,i,'enter')"
+                                   defaultTime="14:00"></ngx-material-timepicker>
+        </div>
+      </div>
+      <!-- Grid column -->
+
+      <!-- Grid column -->
+      <div class="col-2">
+        <!-- Material input -->
+        <div class="md-form">
+          <button (click)="onRemoveSortieEntree(i)" class="px-2 py-1 m-0" color="danger" mdbBtn mdbWavesEffect
+                  type="button">
+            <mdb-icon fas icon="minus-circle"></mdb-icon>
+          </button>
+        </div>
+      </div>
+      <!-- Grid column -->
+    </div>
+    <!-- Grid row -->
+  </div>
+  <!-- Material column sizing form -->
+
+  <button (click)="onAddSortieEntree()" color="light" mdbBtn mdbWavesEffect rounded="true" size="sm" type="button">
+    <mdb-icon fas icon="plus"></mdb-icon>
   </button>
 
   <!-- Material form group -->
