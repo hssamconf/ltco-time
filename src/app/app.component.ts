@@ -2,13 +2,15 @@ import {AfterViewChecked, Component, ElementRef, OnInit, QueryList, ViewChild, V
 import * as moment from 'moment';
 import 'moment/locale/fr';
 import {NgxMaterialTimepickerComponent} from 'ngx-material-timepicker';
-import {Time} from '@angular/common';
 
 moment.locale('fr');
 
 interface Times {
   exit: moment.Moment;
   enter: moment.Moment;
+  icon: string;
+  outLunch: boolean;
+  exitDuration: number; // in minutes
 }
 
 @Component({
@@ -41,18 +43,24 @@ export class AppComponent implements OnInit, AfterViewChecked {
   onSelectHour(hour: string): void {
     const enter = moment(hour, 'HH:mm');
     this.exit = enter.add(+this.defaultHours, 'h').add(+this.defaultMinutes, 'm');
+    this.timesList = [];
   }
 
   onAddSortieEntree(): void {
     if (this.exit) {
-      this.timesList.push({enter: null, exit: null});
+      this.timesList.push({enter: null, exit: null, icon: 'sunset', outLunch: false, exitDuration: 0});
       this.scrollToBottom();
     }
   }
 
   onRemoveSortieEntree(index: number): void {
     const deletedTime: Times[] = this.timesList.splice(index, 1);
-    this.exit.subtract(deletedTime[0].enter.diff(deletedTime[0].exit, 'seconds'), 'seconds');
+    if (deletedTime[0].enter !== null && deletedTime[0].exit !== null) {// todo
+      this.exit.subtract(deletedTime[0].enter.diff(deletedTime[0].exit, 'seconds'), 'seconds');
+      if (deletedTime[0].outLunch) {
+        this.exit.add(30, 'minutes');
+      }
+    }
   }
 
   scrollToBottom(): void {
@@ -64,14 +72,46 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   onSelectAdditionalTime(time: string, index: number, state: string) {
+
+    const currentTimes: Times = this.timesList[index];
+
     if (state === 'enter') {
-      this.timesList[index].enter = moment(time, 'HH:mm');
+      currentTimes.enter = moment(time, 'HH:mm');
     } else {
-      this.timesList[index].exit = moment(time, 'HH:mm');
+      currentTimes.exit = moment(time, 'HH:mm');
     }
 
-    if (this.timesList[index].enter !== null && this.timesList[index].exit !== null) {
-      this.exit.add(this.timesList[index].enter.diff(this.timesList[index].exit, 'seconds'), 'seconds');
+    // si on a l'entree et la sortie on calcul la duration et on met a jour la sortie prevue
+    if (currentTimes.enter !== null && currentTimes.exit !== null) {
+      let nbrOfExitMinutes = currentTimes.enter.diff(currentTimes.exit, 'minutes');
+      this.timesList[index].exitDuration = nbrOfExitMinutes;
+
+      console.log('nbrOfExitMinutes', nbrOfExitMinutes);
+      if (currentTimes.exit.hour() >= 12 && currentTimes.exit.hour() <= 14
+        && this.timesList.filter(item => item.outLunch === true).length === 0) {
+
+        const nbrOfExitMinutesBetween12And14 = this.timesList
+          .filter(item => item.exit.hour() >= 12 && item.exit.hour() <= 14)
+          .map(item => item.exitDuration)
+          .reduce((prevItem, currentItem) => prevItem + currentItem, 0);
+        console.log('nfbOfExitMinutesBetween12And14', nbrOfExitMinutesBetween12And14);
+
+        if (nbrOfExitMinutesBetween12And14 >= 30) {
+          this.timesList[index].outLunch = true;
+          this.timesList[index].icon = 'burger';
+          nbrOfExitMinutes = nbrOfExitMinutesBetween12And14 - 30;
+        } else if (nbrOfExitMinutes < 30) {
+          nbrOfExitMinutes = 0;
+        } else if (nbrOfExitMinutes >= 30) {
+          this.timesList[index].outLunch = true;
+          this.timesList[index].icon = 'burger';
+          nbrOfExitMinutes -= 30;
+        }
+      }
+      this.exit.add(nbrOfExitMinutes, 'minutes');
     }
+  }
+
+  onReset() {
   }
 }

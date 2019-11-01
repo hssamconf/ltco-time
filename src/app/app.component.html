@@ -27,7 +27,7 @@
                  readonly
                  type="text">
           <label [for]="'sortie_'+i">Sortie</label>
-          <ngx-material-timepicker #sortie_timepicker (timeSet)="onSelectAdditionalTime($event, i,'exit')"
+          <ngx-material-timepicker #sortie_timepicker (timeSet)="onSelectAdditionalTime($event,i,'exit')"
                                    defaultTime="12:00"></ngx-material-timepicker>
         </div>
       </div>
@@ -41,16 +41,18 @@
                  readonly type="text">
           <label [for]="'entree_'+i">Entrée</label>
           <ngx-material-timepicker #entree_timepicker (timeSet)="onSelectAdditionalTime($event,i,'enter')"
-                                   defaultTime="14:00"></ngx-material-timepicker>
+                                   defaultTime="12:00"></ngx-material-timepicker>
         </div>
       </div>
       <!-- Grid column -->
-
+      <div class="col-1">
+        <img [src]="'assets/img/'+times.icon+'.png'">
+      </div>
       <!-- Grid column -->
       <div class="col-2">
         <!-- Material input -->
         <div class="md-form">
-          <button (click)="onRemoveSortieEntree(i)" class="px-2 py-1 m-0" color="danger" mdbBtn mdbWavesEffect
+          <button (click)="onRemoveSortieEntree(i)" class="px-2 py-1" color="danger" mdbBtn mdbWavesEffect
                   type="button">
             <mdb-icon fas icon="minus-circle"></mdb-icon>
           </button>
@@ -72,6 +74,10 @@
       <mdb-badge [success]="true">
         <mdb-icon fas icon="running"></mdb-icon>
         {{exit?.format('HH:mm')}}
+      </mdb-badge>
+      <span class="m-1"></span>
+      <mdb-badge (click)="onReset()" [default]="true">
+        <mdb-icon fas icon="redo"></mdb-icon>
       </mdb-badge>
     </h2>
     <p>{{exit?.fromNow()}}</p>
