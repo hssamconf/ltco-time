@@ -45,11 +45,11 @@
         </div>
       </div>
       <!-- Grid column -->
-      <div class="col-1">
+      <div class="col-2">
         <img [src]="'assets/img/'+times.icon+'.png'">
       </div>
       <!-- Grid column -->
-      <div class="col-2">
+      <div *ngIf="timesList.length===i+1" class="col-2">
         <!-- Material input -->
         <div class="md-form">
           <button (click)="onRemoveSortieEntree(i)" class="px-2 py-1" color="danger" mdbBtn mdbWavesEffect
