@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     BrowserModule,
     BrowserAnimationsModule,
     MDBBootstrapModule.forRoot(),
-    NgxMaterialTimepickerModule.setLocale('fr-FR')
+    NgxMaterialTimepickerModule.setLocale('fr-FR'),
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

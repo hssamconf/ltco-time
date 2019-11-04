@@ -97,6 +97,9 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   onReset() {
+    this.enter = null;
+    this.exit = null;
+    this.timesList = [];
   }
 
   private makeCalculAndUpdateExitTime(currentTimes: Times, currentIndex: number): void {

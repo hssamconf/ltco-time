@@ -11,7 +11,8 @@
   </div>
 
   <div class="md-form form-group">
-    <input [format]="24" [ngxTimepicker]="timepicker" class="form-control" id="form1" mdbInput readonly type="text">
+    <input [(ngModel)]="enter" [format]="24" [ngxTimepicker]="timepicker" class="form-control" id="form1" mdbInput
+           readonly type="text">
     <label for="form1">Entrée</label>
     <ngx-material-timepicker #timepicker (timeSet)="onSelectHour($event)" defaultTime="09:00"></ngx-material-timepicker>
   </div>
@@ -23,7 +24,8 @@
       <div class="col">
         <!-- Material input -->
         <div class="md-form">
-          <input [format]="24" [id]="'sortie_'+i" [ngxTimepicker]="sortie_timepicker" class="form-control" mdbInput
+          <input [disabled]="timesList[i].enter !== null && timesList[i].exit !== null" [format]="24" [id]="'sortie_'+i"
+                 [ngxTimepicker]="sortie_timepicker" class="form-control" mdbInput
                  readonly
                  type="text">
           <label [for]="'sortie_'+i">Sortie</label>
@@ -37,7 +39,8 @@
       <div class="col">
         <!-- Material input -->
         <div class="md-form">
-          <input [format]="24" [id]="'entree_'+i" [ngxTimepicker]="entree_timepicker" class="form-control" mdbInput
+          <input [disabled]="timesList[i].enter !== null && timesList[i].exit !== null" [format]="24" [id]="'entree_'+i"
+                 [ngxTimepicker]="entree_timepicker" class="form-control" mdbInput
                  readonly type="text">
           <label [for]="'entree_'+i">Entrée</label>
           <ngx-material-timepicker #entree_timepicker (timeSet)="onSelectAdditionalTime($event,i,'enter')"
