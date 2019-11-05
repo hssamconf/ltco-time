@@ -6,7 +6,7 @@
       <mdb-badge [success]="true">{{today.format('dddd') | uppercase}}</mdb-badge>
     </h5>
     <h5>Heures de travail prévues
-      <mdb-badge [success]="true">{{defaultHours}}:{{defaultMinutes}}</mdb-badge>
+      <mdb-badge [success]="true">{{displayHours}}:{{displayMinutes}}</mdb-badge>
     </h5>
   </div>
 
@@ -16,13 +16,11 @@
     <label for="form1">Entrée</label>
     <ngx-material-timepicker #timepicker (timeSet)="onSelectHour($event)" defaultTime="09:00"></ngx-material-timepicker>
   </div>
-  <!-- Material column sizing form -->
+
   <div #times_container class="times-container">
-    <!-- Grid row -->
-    <div *ngFor="let times of timesList; let i = index" class="form-row align-items-center animated slideInLeft">
-      <!-- Grid column -->
+    <div *ngFor="let times of timesList; let i = index" [@EnterLeave]="'flyIn'"
+         class="form-row align-items-center">
       <div class="col">
-        <!-- Material input -->
         <div class="md-form">
           <input [disabled]="timesList[i].enter !== null && timesList[i].exit !== null" [format]="24" [id]="'sortie_'+i"
                  [ngxTimepicker]="sortie_timepicker" class="form-control" mdbInput
@@ -33,11 +31,8 @@
                                    defaultTime="12:00"></ngx-material-timepicker>
         </div>
       </div>
-      <!-- Grid column -->
 
-      <!-- Grid column -->
       <div class="col">
-        <!-- Material input -->
         <div class="md-form">
           <input [disabled]="timesList[i].enter !== null && timesList[i].exit !== null" [format]="24" [id]="'entree_'+i"
                  [ngxTimepicker]="entree_timepicker" class="form-control" mdbInput
@@ -47,11 +42,9 @@
                                    defaultTime="12:00"></ngx-material-timepicker>
         </div>
       </div>
-      <!-- Grid column -->
       <div class="col-2">
         <img [src]="'assets/img/'+times.icon+'.png'">
       </div>
-      <!-- Grid column -->
       <div *ngIf="timesList.length===i+1" class="col-2">
         <!-- Material input -->
         <div class="md-form">
@@ -61,17 +54,13 @@
           </button>
         </div>
       </div>
-      <!-- Grid column -->
     </div>
-    <!-- Grid row -->
   </div>
-  <!-- Material column sizing form -->
 
   <button (click)="onAddSortieEntree()" color="light" mdbBtn mdbWavesEffect rounded="true" size="sm" type="button">
     <mdb-icon fas icon="plus"></mdb-icon>
   </button>
 
-  <!-- Material form group -->
   <div class="fixed-bottom mb-4">
     <h2>
       <mdb-badge [success]="true">

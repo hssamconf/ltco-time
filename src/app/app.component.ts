@@ -1,6 +1,7 @@
 import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import * as moment from 'moment';
 import 'moment/locale/fr';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 moment.locale('fr');
 
@@ -15,12 +16,26 @@ interface Times {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  animations: [
+    trigger('EnterLeave', [
+      state('flyIn', style({ transform: 'translateX(0)' })),
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)' }),
+        animate('0.5s ease-in')
+      ]),
+      transition(':leave', [
+        animate('0.3s ease-out', style({ transform: 'translateX(100%)' }))
+      ])
+    ])
+  ]
 })
 export class AppComponent implements OnInit, AfterViewChecked {
   today: moment.Moment;
   defaultHours = '00';
+  displayHours = '00';
   defaultMinutes = '00';
+  displayMinutes = '00';
   exit: moment.Moment;
   enter: moment.Moment;
   timesList: Times[] = [];
@@ -34,9 +49,12 @@ export class AppComponent implements OnInit, AfterViewChecked {
     // set default work hours Lundi et Vendredi 8h30, Mardi au Jeudi 9h, week-and 0h
     if (this.today.day() === 1 || this.today.day() === 5) {
       this.defaultHours = '09';
+      this.displayHours = '08';
+      this.displayMinutes = '30';
     } else if (this.today.day() > 1 && this.today.day() < 5) {
       this.defaultHours = '09';
       this.defaultMinutes = '30';
+      this.displayHours = '09';
     }
   }
 
@@ -73,7 +91,6 @@ export class AppComponent implements OnInit, AfterViewChecked {
       this.exit.subtract(deletedTime.exitDuration, 'minutes');
     }
     this.timesList.splice(index, 1);
-
     console.log(this.timesList);
   }
 
