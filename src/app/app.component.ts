@@ -114,6 +114,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   onReset() {
+    this.ngOnInit();
     this.enter = null;
     this.exit = null;
     this.timesList = [];
